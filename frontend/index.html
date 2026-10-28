@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Tema aplicado antes de qualquer CSS para evitar flash (FOUC de tema). -->
+    <script>
+      (function () {
+        var theme = 'light'
+        try {
+          var saved = localStorage.getItem('conduit.theme')
+          if (saved === 'light' || saved === 'dark') {
+            theme = saved
+          } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            theme = 'dark'
+          }
+        } catch (e) {
+          /* localStorage indisponivel: segue com o padrao do sistema */
+        }
+        document.documentElement.setAttribute('data-theme', theme)
+        document.documentElement.style.colorScheme = theme
+      })()
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Conduit: histórias de quem constrói software</title>
+    <meta name="description" content="Conduit é uma comunidade para publicar, ler e discutir artigos sobre desenvolvimento de software." />
+    <meta name="theme-color" content="#F7F8FB" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0B0D12" media="(prefers-color-scheme: dark)" />
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <meta property="og:title" content="Conduit: histórias de quem constrói software" />
+    <meta property="og:description" content="Publique, leia e discuta artigos sobre desenvolvimento de software. App RealWorld em Vue 3 com backend Spring Boot." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://realworld-conduit-vue.vercel.app/" />
+    <meta property="og:image" content="https://realworld-conduit-vue.vercel.app/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Conduit, comunidade de artigos sobre software" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Conduit: histórias de quem constrói software" />
+    <meta name="twitter:description" content="Publique, leia e discuta artigos sobre desenvolvimento de software." />
+    <meta name="twitter:image" content="https://realworld-conduit-vue.vercel.app/og-image.png" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    />
+  </head>
+  <body>
+    <noscript>O Conduit precisa de JavaScript habilitado para funcionar.</noscript>
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
