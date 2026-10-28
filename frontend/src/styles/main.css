@@ -26,6 +26,7 @@
   --warning-soft: #fff5e0;
   --focus: #4343dd;
   --overlay: rgba(247, 248, 251, 0.82);
+  --overlay-strong: rgba(247, 248, 251, 0.96);
   --hero-grad: linear-gradient(135deg, #4b4be6 0%, #6b4be0 55%, #2f6bd8 100%); /* branco por cima >= 4.9:1 em todo o gradiente */
 
   --shadow-sm: 0 1px 2px rgba(18, 20, 28, 0.06);
@@ -91,6 +92,7 @@
   --warning-soft: rgba(255, 196, 87, 0.1);
   --focus: #a9a9ff;
   --overlay: rgba(11, 13, 18, 0.78);
+  --overlay-strong: rgba(11, 13, 18, 0.95);
   --hero-grad: linear-gradient(135deg, #3d3dc9 0%, #5b3fc9 55%, #2a63c4 100%);
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --shadow-md: 0 6px 20px -6px rgba(0, 0, 0, 0.55);

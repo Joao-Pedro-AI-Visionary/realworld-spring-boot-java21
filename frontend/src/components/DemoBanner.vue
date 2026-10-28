@@ -30,8 +30,8 @@ function dismiss(): void {
     <div class="container inner">
       <AppIcon name="info" :size="16" />
       <p>
-        <strong>Modo demo:</strong> dados ficam só no seu navegador. Entre com
-        <code>demo@conduit.dev</code> / <code>demo1234</code>.
+        <strong>Modo demo:</strong> dados ficam só no seu navegador.<span class="creds"> Entre com
+        <code>demo@conduit.dev</code> / <code>demo1234</code>.</span>
       </p>
       <button
         type="button"
@@ -92,5 +92,12 @@ code {
 .close:hover {
   background: var(--surface-2);
   color: var(--text);
+}
+
+/* No mobile o aviso fica em uma linha; as credenciais aparecem na tela de login. */
+@media (max-width: 639px) {
+  .creds {
+    display: none;
+  }
 }
 </style>

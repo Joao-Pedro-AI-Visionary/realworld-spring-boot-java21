@@ -57,7 +57,7 @@ const items = computed<Item[]>(() =>
   justify-content: space-around;
   gap: var(--space-1);
   padding: var(--space-1) var(--space-2) calc(var(--space-1) + env(safe-area-inset-bottom));
-  background: var(--overlay);
+  background: var(--overlay-strong);
   backdrop-filter: saturate(160%) blur(14px);
   -webkit-backdrop-filter: saturate(160%) blur(14px);
   border-top: 1px solid var(--border);
