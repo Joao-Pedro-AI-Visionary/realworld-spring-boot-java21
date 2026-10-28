@@ -32,9 +32,7 @@ public class ArticleQueryService {
     if (articleData == null) {
       return Optional.empty();
     } else {
-      if (user != null) {
-        fillExtraInfo(id, user, articleData);
-      }
+      fillExtraInfo(id, user, articleData);
       return Optional.of(articleData);
     }
   }
@@ -44,9 +42,7 @@ public class ArticleQueryService {
     if (articleData == null) {
       return Optional.empty();
     } else {
-      if (user != null) {
-        fillExtraInfo(articleData.getId(), user, articleData);
-      }
+      fillExtraInfo(articleData.getId(), user, articleData);
       return Optional.of(articleData);
     }
   }
@@ -173,8 +169,11 @@ public class ArticleQueryService {
   }
 
   private void fillExtraInfo(String id, User user, ArticleData articleData) {
-    articleData.setFavorited(articleFavoritesReadService.isUserFavorite(user.getId(), id));
     articleData.setFavoritesCount(articleFavoritesReadService.articleFavoriteCount(id));
+    if (user == null) {
+      return;
+    }
+    articleData.setFavorited(articleFavoritesReadService.isUserFavorite(user.getId(), id));
     articleData
         .getProfileData()
         .setFollowing(
