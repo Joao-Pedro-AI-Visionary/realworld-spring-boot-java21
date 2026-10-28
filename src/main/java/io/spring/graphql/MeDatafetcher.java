@@ -39,9 +39,9 @@ public class MeDatafetcher {
     UserWithToken userWithToken = new UserWithToken(userData, authorization.split(" ")[1]);
     User result =
         User.newBuilder()
-            .email(userWithToken.getEmail())
-            .username(userWithToken.getUsername())
-            .token(userWithToken.getToken())
+            .email(userWithToken.email())
+            .username(userWithToken.username())
+            .token(userWithToken.token())
             .build();
     return DataFetcherResult.<User>newResult().data(result).localContext(user).build();
   }
