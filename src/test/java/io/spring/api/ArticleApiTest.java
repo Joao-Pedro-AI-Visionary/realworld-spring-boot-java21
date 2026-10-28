@@ -69,7 +69,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
     when(articleQueryService.findBySlug(eq(slug), eq(null))).thenReturn(Optional.of(articleData));
 
     RestAssuredMockMvc.when()
-        .get("/articles/{slug}", slug)
+        .get("/api/articles/{slug}", slug)
         .then()
         .statusCode(200)
         .body("article.slug", equalTo(slug))
@@ -80,7 +80,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
   @Test
   public void should_404_if_article_not_found() throws Exception {
     when(articleQueryService.findBySlug(anyString(), any())).thenReturn(Optional.empty());
-    RestAssuredMockMvc.when().get("/articles/not-exists").then().statusCode(404);
+    RestAssuredMockMvc.when().get("/api/articles/not-exists").then().statusCode(404);
   }
 
   @Test
@@ -112,7 +112,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(updateParam)
         .when()
-        .put("/articles/{slug}", originalArticle.getSlug())
+        .put("/api/articles/{slug}", originalArticle.getSlug())
         .then()
         .statusCode(200)
         .body("article.slug", equalTo(updatedArticleData.getSlug()));
@@ -160,7 +160,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
         .header("Authorization", "Token " + token)
         .body(updateParam)
         .when()
-        .put("/articles/{slug}", article.getSlug())
+        .put("/api/articles/{slug}", article.getSlug())
         .then()
         .statusCode(403);
   }
@@ -178,7 +178,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .delete("/articles/{slug}", article.getSlug())
+        .delete("/api/articles/{slug}", article.getSlug())
         .then()
         .statusCode(204);
 
@@ -201,7 +201,7 @@ public class ArticleApiTest extends TestWithCurrentUser {
     given()
         .header("Authorization", "Token " + token)
         .when()
-        .delete("/articles/{slug}", article.getSlug())
+        .delete("/api/articles/{slug}", article.getSlug())
         .then()
         .statusCode(403);
   }
