@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
@@ -31,11 +32,14 @@ public class GraphQLCustomizeExceptionHandler implements DataFetcherExceptionHan
   @Override
   public CompletableFuture<DataFetcherExceptionHandlerResult> handleException(
       DataFetcherExceptionHandlerParameters handlerParameters) {
-    if (handlerParameters.getException() instanceof InvalidAuthenticationException) {
+    if (handlerParameters.getException() instanceof InvalidAuthenticationException
+        || handlerParameters.getException() instanceof AuthenticationException) {
       GraphQLError graphqlError =
           TypedGraphQLError.newBuilder()
               .errorType(ErrorType.UNAUTHENTICATED)
-              .message(handlerParameters.getException().getMessage())
+              .message(
+                  Objects.requireNonNullElse(
+                      handlerParameters.getException().getMessage(), "authentication required"))
               .path(handlerParameters.getPath())
               .build();
       return CompletableFuture.completedFuture(
