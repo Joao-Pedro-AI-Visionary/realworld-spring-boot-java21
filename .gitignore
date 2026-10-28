@@ -27,3 +27,6 @@ nbdist/
 
 ### Local env ###
 .env
+
+### Local tool artifacts ###
+.playwright-mcp/
