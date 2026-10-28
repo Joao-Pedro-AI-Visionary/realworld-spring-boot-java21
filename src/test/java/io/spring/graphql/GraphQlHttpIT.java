@@ -184,7 +184,7 @@ class GraphQlHttpIT extends IntegrationTestBase {
         .body("errors[0].message", equalTo("invalid email or password"))
         .body("errors[0].path", contains("login"))
         .body("errors[0].extensions.errorType", equalTo("UNAUTHENTICATED"))
-        .body("errors[0].message", equalTo("authentication required"));
+        .body("errors[0].message", equalTo("invalid email or password"));
   }
 
   @Test
@@ -322,7 +322,8 @@ class GraphQlHttpIT extends IntegrationTestBase {
             Map.of("input", Map.of("title", unique("Anon type "), "description", "d", "body", "b")))
         .then()
         .statusCode(200)
-        .body("errors[0].extensions.errorType", equalTo("UNAUTHENTICATED"));
+        .body("errors[0].extensions.errorType", equalTo("UNAUTHENTICATED"))
+        .body("errors[0].message", equalTo("authentication required"));
   }
 
   @Test
