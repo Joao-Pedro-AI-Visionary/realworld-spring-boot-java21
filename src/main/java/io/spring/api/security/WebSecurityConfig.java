@@ -2,6 +2,9 @@ package io.spring.api.security;
 
 import static java.util.Arrays.asList;
 
+import java.util.Arrays;
+import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -70,14 +73,26 @@ public class WebSecurityConfig {
     return http.build();
   }
 
+  /**
+   * Origins come from {@code cors.allowed-origins} (env {@code CORS_ALLOWED_ORIGINS}), a
+   * comma-separated list of exact origins or patterns such as {@code https://*.vercel.app}. A lone
+   * {@code *} keeps the permissive local-dev behaviour and answers with a literal wildcard.
+   */
   @Bean
-  public CorsConfigurationSource corsConfigurationSource() {
+  public CorsConfigurationSource corsConfigurationSource(
+      @Value("${cors.allowed-origins:*}") String allowedOrigins) {
     final CorsConfiguration configuration = new CorsConfiguration();
-    configuration.setAllowedOrigins(asList("*"));
-    configuration.setAllowedMethods(asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
-    // setAllowCredentials(true) is important, otherwise:
-    // The value of the 'Access-Control-Allow-Origin' header in the response must not be the
-    // wildcard '*' when the request's credentials mode is 'include'.
+    List<String> origins = parseOrigins(allowedOrigins);
+    if (origins.isEmpty() || origins.contains("*")) {
+      configuration.setAllowedOrigins(List.of("*"));
+    } else {
+      // Patterns echo the matching request origin back, which also supports subdomain wildcards.
+      configuration.setAllowedOriginPatterns(origins);
+    }
+    configuration.setAllowedMethods(
+        asList("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"));
+    // Auth uses the Authorization header, not cookies, so credentials stay disabled. This also
+    // keeps a literal '*' origin legal (it is rejected when credentials are allowed).
     configuration.setAllowCredentials(false);
     // setAllowedHeaders is important! Without it, OPTIONS preflight request
     // will fail with 403 Invalid CORS request
@@ -85,5 +100,16 @@ public class WebSecurityConfig {
     final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
     source.registerCorsConfiguration("/**", configuration);
     return source;
+  }
+
+  static List<String> parseOrigins(String value) {
+    if (value == null) {
+      return List.of();
+    }
+    return Arrays.stream(value.split(","))
+        .map(String::trim)
+        .filter(origin -> !origin.isEmpty())
+        .map(origin -> origin.endsWith("/") ? origin.substring(0, origin.length() - 1) : origin)
+        .toList();
   }
 }
