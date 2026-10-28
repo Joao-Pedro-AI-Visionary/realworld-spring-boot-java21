@@ -1,6 +1,7 @@
 import { createPinia, setActivePinia } from 'pinia'
 import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 import { ApiError, setTokenProvider, setTransport } from '@/api/client'
+import { MOCK_DEMO_LOGIN } from '@/api/demo/credentials'
 import { fakeTransport, makeUser } from '@/test/helpers'
 import { TOKEN_KEY, useAuthStore } from './auth'
 
@@ -16,21 +17,21 @@ afterEach(() => {
 
 describe('auth store', () => {
   it('login guarda usuario, token em memoria e em localStorage', async () => {
-    const t = fakeTransport(() => ({ status: 200, body: { user: makeUser({ token: 'jwt-login' }) } }))
+    const t = fakeTransport(() => ({ status: 200, body: { user: makeUser({ token: 'mock-jwt-login' }) } }))
     setTransport(t)
     const auth = useAuthStore()
     expect(auth.isLoggedIn).toBe(false)
 
-    const u = await auth.login({ email: 'demo@conduit.dev', password: 'demo1234' })
+    const u = await auth.login({ ...MOCK_DEMO_LOGIN })
 
     expect(u.username).toBe('demo')
     expect(auth.isLoggedIn).toBe(true)
-    expect(auth.token).toBe('jwt-login')
-    expect(localStorage.getItem(TOKEN_KEY)).toBe('jwt-login')
+    expect(auth.token).toBe('mock-jwt-login')
+    expect(localStorage.getItem(TOKEN_KEY)).toBe('mock-jwt-login')
     expect(t.calls[0]).toMatchObject({
       method: 'POST',
       path: '/users/login',
-      body: { user: { email: 'demo@conduit.dev', password: 'demo1234' } },
+      body: { user: { ...MOCK_DEMO_LOGIN } },
       token: null,
     })
   })
@@ -50,7 +51,7 @@ describe('auth store', () => {
     const t = fakeTransport(() => ({ status: 201, body: { user: makeUser({ username: 'nova', token: 'jwt-reg' }) } }))
     setTransport(t)
     const auth = useAuthStore()
-    await auth.register({ username: 'nova', email: 'nova@x.dev', password: '12345678' })
+    await auth.register({ username: 'nova', email: 'nova@x.dev', password: 'nova-senha-mock' })
     expect(t.calls[0]).toMatchObject({ method: 'POST', path: '/users', body: { user: { username: 'nova' } } })
     expect(auth.user?.username).toBe('nova')
     expect(localStorage.getItem(TOKEN_KEY)).toBe('jwt-reg')
@@ -59,7 +60,7 @@ describe('auth store', () => {
   it('logout limpa usuario, token e localStorage', async () => {
     setTransport(fakeTransport(() => ({ status: 200, body: { user: makeUser() } })))
     const auth = useAuthStore()
-    await auth.login({ email: 'demo@conduit.dev', password: 'demo1234' })
+    await auth.login({ ...MOCK_DEMO_LOGIN })
     auth.logout()
     expect(auth.user).toBeNull()
     expect(auth.token).toBeNull()
@@ -123,7 +124,7 @@ describe('auth store', () => {
     const t = fakeTransport(() => responses.shift()!)
     setTransport(t)
     const auth = useAuthStore()
-    await auth.login({ email: 'demo@conduit.dev', password: 'demo1234' })
+    await auth.login({ ...MOCK_DEMO_LOGIN })
     const u = await auth.update({ bio: 'Nova bio' })
     expect(t.calls[1]).toMatchObject({ method: 'PUT', path: '/user', body: { user: { bio: 'Nova bio' } }, token: 'jwt' })
     expect(u.bio).toBe('Nova bio')

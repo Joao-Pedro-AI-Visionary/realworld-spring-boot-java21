@@ -1,6 +1,7 @@
+import { MOCK_DEMO_LOGIN } from '../src/api/demo/credentials'
 import { expect, test as base, type Page } from '@playwright/test'
 
-export const DEMO = { email: 'demo@conduit.dev', password: 'demo1234', username: 'demo' }
+export const DEMO = { ...MOCK_DEMO_LOGIN, username: 'demo' }
 
 // Cada teste roda em um BrowserContext novo do Playwright, entao localStorage (inclusive o banco
 // demo `conduit.demo.db`) sempre comeca vazio. expectCleanStorage confirma isso quando necessario.

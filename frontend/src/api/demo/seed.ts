@@ -1,5 +1,7 @@
 // Dados semente do modo demo: 3 usuarios, 12 artigos em markdown, comentarios, favoritos e follows.
 
+import { MOCK_DEMO_LOGIN, MOCK_SEED_PASSWORDS } from './credentials'
+
 export interface DemoUser {
   id: string
   email: string
@@ -174,7 +176,7 @@ Suba a aplicação inteira e chame o endpoint como o cliente chamaria:
 \`\`\`bash
 curl -X POST localhost:8080/api/users \\
   -H 'Content-Type: application/json' \\
-  -d '{"user":{"email":"a@b.dev","username":"a","password":"12345678"}}'
+  -d '{"user":{"email":"user@example.com","username":"user","password":"<senha>"}}'
 \`\`\`
 
 ## Teste o caminho ruim
@@ -381,9 +383,9 @@ export function createSeed(): DemoDb {
   const users: DemoUser[] = [
     {
       id: 'u1',
-      email: 'demo@conduit.dev',
+      email: MOCK_DEMO_LOGIN.email,
       username: 'demo',
-      password: 'demo1234',
+      password: MOCK_SEED_PASSWORDS.demo,
       bio: 'Conta de demonstração. Escreve sobre UX, Vue e design systems.',
       image: null,
     },
@@ -391,7 +393,7 @@ export function createSeed(): DemoDb {
       id: 'u2',
       email: 'ana@conduit.dev',
       username: 'ana_ribeiro',
-      password: 'ana12345',
+      password: MOCK_SEED_PASSWORDS.ana,
       bio: 'Engenheira de frontend. Acessibilidade em primeiro lugar.',
       image: null,
     },
@@ -399,7 +401,7 @@ export function createSeed(): DemoDb {
       id: 'u3',
       email: 'rafael@conduit.dev',
       username: 'rafael_dev',
-      password: 'rafael123',
+      password: MOCK_SEED_PASSWORDS.rafael,
       bio: 'Backend em Java há 10 anos. Gosta de testes que pegam bug de verdade.',
       image: null,
     },

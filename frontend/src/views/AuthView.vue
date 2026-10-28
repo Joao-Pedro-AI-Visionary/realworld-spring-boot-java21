@@ -13,6 +13,7 @@ import { computed, nextTick, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { isDemoMode } from '@/api/config'
 import { ApiError } from '@/api/client'
+import { MOCK_DEMO_LOGIN } from '@/api/demo/credentials'
 import ListErrors from '@/components/ListErrors.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useToastStore } from '@/stores/toast'
@@ -59,9 +60,11 @@ async function submit(): Promise<void> {
 }
 
 function fillDemo(): void {
-  form.email = 'demo@conduit.dev'
-  form.password = 'demo1234'
+  form.email = MOCK_DEMO_LOGIN.email
+  form.password = MOCK_DEMO_LOGIN.password
 }
+
+const PASSWORD_AUTOCOMPLETE = { register: 'new-password', login: 'current-password' } as const
 
 const invalid = (field: string) => (errors.value && errors.value[field] ? 'true' : undefined)
 </script>
@@ -120,7 +123,7 @@ const invalid = (field: string) => (errors.value && errors.value[field] ? 'true'
             class="input"
             type="password"
             name="password"
-            :autocomplete="isRegister ? 'new-password' : 'current-password'"
+            :autocomplete="isRegister ? PASSWORD_AUTOCOMPLETE.register : PASSWORD_AUTOCOMPLETE.login"
             required
             :aria-invalid="invalid('password')"
             data-testid="input-password"

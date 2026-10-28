@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest'
 import { createDemoHandler } from './handler'
 import { createSeed } from './seed'
+import { MOCK_DEMO_LOGIN } from './credentials'
 
 function setup() {
   const db = createSeed()
   const handle = createDemoHandler(db, () => new Date('2026-10-28T12:00:00.000Z'))
   const login = () => {
-    const res = handle('POST', '/users/login', { user: { email: 'demo@conduit.dev', password: 'demo1234' } }, null)
+    const res = handle('POST', '/users/login', { user: MOCK_DEMO_LOGIN }, null)
     return (res.body as { user: { token: string } }).user.token
   }
   return { db, handle, login }
