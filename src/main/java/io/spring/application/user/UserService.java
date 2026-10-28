@@ -1,5 +1,6 @@
 package io.spring.application.user;
 
+import io.spring.Util;
 import io.spring.core.user.User;
 import io.spring.core.user.UserRepository;
 import jakarta.validation.Constraint;
@@ -46,10 +47,11 @@ public class UserService {
   public void updateUser(@Valid UpdateUserCommand command) {
     User user = command.getTargetUser();
     UpdateUserParam updateUserParam = command.getParam();
+    String newPassword = updateUserParam.getPassword();
     user.update(
         updateUserParam.getEmail(),
         updateUserParam.getUsername(),
-        updateUserParam.getPassword(),
+        Util.isEmpty(newPassword) ? newPassword : passwordEncoder.encode(newPassword),
         updateUserParam.getBio(),
         updateUserParam.getImage());
     userRepository.save(user);
